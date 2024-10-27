@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Управление продуктами</title>
+    <style>
+        table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+        th, td {
+            padding: 10px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        .error-message {
+            color: red;
+        }
+    </style>
+</head>
+<body>
+    <h1>Управление продуктами</h1>
+    
+    <!-- Поисковая строка -->
+    <div>
+        <label for="productName">Название продукта:</label>
+        <input type="text" id="productName" name="productName" required>
+        <button onclick="getProducts()">Найти</button>
+    </div>
+    
+    <!-- Таблица для отображения результатов -->
+    <table id="productsTable">
+        <thead>
+            <tr>
+                <th>ID продукта</th>
+                <th>Название продукта</th>
+                <th>Описание продукта</th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+    
+    <!-- Сообщение об ошибке -->
+    <div class="error-message" style="display:none"></div>
+    
+    <hr />
+    
+    <!-- Форма для добавления нового продукта -->
+    <h2>Добавить новый продукт</h2>
+    <form id="addProductForm">
+        <label for="newProductName">Название продукта:</label>
+        <input type="text" id="newProductName" name="newProductName" required><br><br>
+        <label for="newProductDescription">Описание продукта:</label>
+        <textarea id="newProductDescription" name="newProductDescription" rows="4" cols="50" required></textarea><br><br>
+        <button type="button" onclick="addProduct()">Добавить</button>
+    </form>
+    
+    <!-- Форма для обновления продукта -->
+    <h2>Обновить продукт</h2>
+    <form id="updateProductForm">
+        <label for="updateProductUid">UID продукта:</label>
+        <input type="text" id="updateProductUid" name="updateProductUid" required><br><br>
+        <label for="updateProductName">Новое название продукта:</label>
+        <input type="text" id="updateProductName" name="updateProductName"><br><br>
+        <label for="updateProductDescription">Новое описание продукта:</label>
+        <textarea id="updateProductDescription" name="updateProductDescription" rows="4" cols="50"></textarea><br><br>
+        <button type="button" onclick="updateProduct()">Обновить</button>
+    </form>
+    
+    <!-- Форма для удаления продукта -->
+    <h2>Удалить продукт</h2>
+    <form id="deleteProductForm">
+        <label for="deleteProductUid">UID продукта:</label>
+        <input type="text" id="deleteProductUid" name="deleteProductUid" required>
+        <button type="button" onclick="deleteProduct()">Удалить</button>
+    </form>
+    
+    <script>
+        // Функция для получения списка продуктов
+        async function getProducts() {
+            console.log(window.location.href);
+            const productName = document.getElementById('productName').value;
+            const url = `/api/example/productlist?productName=${encodeURIComponent(productName)}`;
+            
+            try {
+                const response = await fetch(url);
+                if (!response.ok) {
+                    throw new Error(response.statusText);
+                }
+                const data = await response.json();
+                
+                if (data.code !== "200") {
+                    throw new Error(data.message);
+                }
+                
+                displayProducts(data.value);
+            } catch (error) {
+                console.error(error);
+                showErrorMessage("Ошибка при получении данных");
+            }
+        }
+        
+        // Функция для отображения продуктов в таблице
+        function displayProducts(products) {
+            const productsTableBody = document.querySelector('#productsTable tbody');
+            productsTableBody.innerHTML = "";
+            
+            products.forEach(product => {
+                let row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${product.productId}</td>
+                    <td>${product.productName}</td>
+                    <td>${product.productDescription}</td>
+                `;
+                productsTableBody.appendChild(row);
+            });
+        }
+        
+        // Функция для добавления нового продукта
+        async function addProduct() {
+            const newProductName = document.getElementById('newProductName').value;
+            const newProductDescription = document.getElementById('newProductDescription').value;
+            
+            if (newProductName && newProductDescription) {
+                try {
+                    const url = '/api/example/product/headadd';
+                    const body = {
+                        name: newProductName,
+                        description: newProductDescription
+                    };
+                    
+                    const response = await fetch(url, {
+                        method: 'PUT',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(body)
+                    });
+                    
+                    if (response.ok) {
+                        alert('Новый продукт успешно добавлен.');
+                    } else {
+                        throw new Error('Ошибка при добавлении продукта.');
+                    }
+                } catch (error) {
+                    console.error('Ошибка при создании продукта:', error.message);
+                    showErrorMessage(`Произошла ошибка: ${error.message}`);
+                }
+            } else {
+                alert('Заполните все поля!');
+            }
+        }
+        
+        // Функция для обновления продукта
+        async function updateProduct() {
+            const updateProductUid = document.getElementById('updateProductUid').value;
+            const updateProductName = document.getElementById('updateProductName').value || null;
+            const updateProductDescription = document.getElementById('updateProductDescription').value || null;
+            
+            if (updateProductUid) {
+                try {
+                    const url = '/api/example/product/headupd';
+                    const body = {
+                        uid: updateProductUid,
+                        name: updateProductName,
+                        description: updateProductDescription
+                    };
+                    
+                    const response = await fetch(url, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(body)
+                    });
+                    
+                    if (response.ok) {
+                        alert('Продукт успешно обновлён.');
+                    } else {
+                        throw new Error('Ошибка при обновлении продукта.');
+                    }
+                } catch (error) {
+                    console.error('Ошибка при обновлении продукта:', error.message);
+                    showErrorMessage(`Произошла ошибка: ${error.message}`);
+                }
+            } else {
+                alert('Введите UID продукта!');
+            }
+        }
+        
+        // Функция для удаления продукта
+        async function deleteProduct() {
+            const deleteProductUid = document.getElementById('deleteProductUid').value;
+            
+            if (deleteProductUid) {
+                try {
+                    const url = `/api/example/product/headrem?productId=${deleteProductUid}`;
+                    
+                    const response = await fetch(url, { method: 'DELETE' });
+                    
+                    if (response.ok) {
+                        alert('Продукт удалён.');
+                    } else {
+                        throw new Error('Ошибка при удалении продукта.');
+                    }
+                } catch (error) {
+                    console.error('Ошибка при удалении продукта:', error.message);
+                    showErrorMessage(`Произошла ошибка: ${error.message}`);
+                }
+            } else {
+                alert('Введите UID продукта для удаления!');
+            }
+        }
+        
+        // Функция для отображения сообщения об ошибке
+        function showErrorMessage(message) {
+            const errorMessageDiv = document.querySelector('.error-message');
+            errorMessageDiv.textContent = message;
+            errorMessageDiv.style.display = 'block';
+        }
+    </script>
+</body>
+</html>
