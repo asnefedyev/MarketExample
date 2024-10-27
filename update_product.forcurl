@@ -1,0 +1,9 @@
+curl --request POST \
+  --url http://localhost:8080/api/example/product/headupd \
+  --header 'Content-Type: application/json' \
+  --header 'User-Agent: test' \
+  --data '{
+	"uid": "8D16AE51-8584-4995-B4BC-041024BC08ED",
+  "name": "Продукт A2",
+  "description": "Это описание продукта Б."
+}'

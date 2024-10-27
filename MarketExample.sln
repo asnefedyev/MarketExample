@@ -10,6 +10,17 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "init", "init", "{4C5EFD15-5
 		Init.sql = Init.sql
 	EndProjectSection
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "CURL", "CURL", "{E66ABE90-3B9E-4A97-9522-49142CFA5A32}"
+	ProjectSection(SolutionItems) = preProject
+		products.forcurl = products.forcurl
+		product_and_versions.forcurl = product_and_versions.forcurl
+		product_and_versions_create.forcurl = product_and_versions_create.forcurl
+		product_and_versions_update.forcurl = product_and_versions_update.forcurl
+		product_create.forcurl = product_create.forcurl
+		product_delete.forcurl = product_delete.forcurl
+		update_product.forcurl = update_product.forcurl
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU

@@ -1,0 +1,29 @@
+curl --request POST \
+  --url http://localhost:8080/api/example/product/upd \
+  --header 'Content-Type: application/json' \
+  --header 'User-Agent: test' \
+  --data '{
+	"uid": "23F51668-D7B6-480F-B90B-07A83DACCF84",
+  "name": "Продукт A",
+  "description": "Это описание продукта A.",
+  "productVersionList": [
+    {
+      "productUid": "9FE0AA98-E88E-4DBE-B629-5A1094486C64",
+      "name": "Версия 6.0",
+      "description": "Описание версии 2.0 продукта A.",
+      "createDate": "2023-10-01T12:00:00Z",
+      "width": 10.5,
+      "height": 5.0,
+      "length": 20.0
+    },
+    {
+			"productUid": "D8CB5A1F-AC7F-4749-97BF-CFF9EE57DF38",
+      "name": "Версия 5.0",
+      "description": "Описание версии 3.0 продукта A.",
+      "createDate": "2023-10-15T12:00:00Z",
+      "width": 11.0,
+      "height": 5.5,
+      "length": 22.0
+    }
+  ]
+}'

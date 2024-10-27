@@ -1,0 +1,8 @@
+curl --request PUT \
+  --url http://localhost:8080/api/example/product/headadd \
+  --header 'Content-Type: application/json' \
+  --header 'User-Agent: test' \
+  --data '{
+  "name": "Продукт A1",
+  "description": "Это описание продукта A."
+}'

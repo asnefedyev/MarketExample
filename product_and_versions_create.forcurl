@@ -1,0 +1,27 @@
+curl --request PUT \
+  --url http://localhost:8080/api/example/product/add \
+  --header 'Content-Type: application/json' \
+  --header 'User-Agent: test' \
+  --data '{
+  "name": "Продукт A1",
+  "description": "Это описание продукта A.",
+  "productVersionList": [
+    {
+      "productUid": "e30b8e4e-8aea-4f4a-8c9b-d80e5ee979e5",
+      "name": "Версия 11.0",
+      "description": "Описание версии 1.0 продукта A.",
+      "createDate": "2023-10-01T12:00:00Z",
+      "width": 10.5,
+      "height": 5.0,
+      "length": 20.0
+    },
+    {
+      "name": "Версия 2.01",
+      "description": "Описание версии 2.0 продукта A.",
+      "createDate": "2023-10-15T12:00:00Z",
+      "width": 11.0,
+      "height": 5.5,
+      "length": 22.0
+    }
+  ]
+}'
